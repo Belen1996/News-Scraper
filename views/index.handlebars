@@ -1,0 +1,19 @@
+<div class="container">
+    <h1>Latest news!</h1>
+
+    {{#each articles}}
+        <div class="row">
+            <div class="col-md-8">
+                {{headline}}<br>
+                ({{original_article}})
+            </div>
+            <div class="col-md-4">
+                <button id="article-{{id}}" data-id="{{id}}" data-headline="{{headline}}" data-description="{{description}}", data-original="{{original_article}}">Save article</button>
+            </div>
+        </div>
+        <div class="row">
+            {{description}}
+        </div>
+        <br>
+    {{/each}}
+</div>
