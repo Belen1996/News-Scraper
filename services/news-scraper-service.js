@@ -41,12 +41,33 @@ function clearSavedArticles(db) {
     }
 }
 
+function getCommentsFromArticle(db) {
+    return function(article_id, cb) {
+        db.getNotes(article_id, cb);
+    }
+}
+
+function saveCommentForArticle(db) {
+    return function(article_id, note, cb) {
+        db.saveNote(article_id, note, cb);
+    }
+}
+
+function removeCommentFromArticle(db) {
+    return function(article_id, note_id, cb) {
+        db.removeNote(article_id, note_id, cb);
+    }
+}
+
 var news_scraper_service = {
     scrapeArticlesFromSource: scrapeArticlesFromSource(news_source, db),
     saveArticle: saveArticle(db),
     removeSavedArticle: removeSavedArticle(db),
     getSavedArticles: getSavedArticles(db),
-    clearSavedArticles: clearSavedArticles(db)
+    clearSavedArticles: clearSavedArticles(db),
+    getCommentsFromArticle: getCommentsFromArticle(db),
+    saveCommentForArticle: saveCommentForArticle(db),
+    removeCommentFromArticle: removeCommentFromArticle(db)
 }
 
 module.exports = news_scraper_service;
