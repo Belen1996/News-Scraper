@@ -1,7 +1,7 @@
 const Article = require("../model/article.js");
 
-function getArticles() {
-    return [new Article("Headline 1", "Article 1", "https://www.google.com", []), new Article("Headline 2", "Article 2", "https://www.yahoo.com", [])];
+function getArticles(cb) {
+    cb([new Article(null, "Headline 1", "Article 1", "https://www.google.com", []), new Article(null, "Headline 2", "Article 2", "https://www.yahoo.com", [])]);
 }
 
 var news_source = {

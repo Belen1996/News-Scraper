@@ -17,8 +17,7 @@ router.get("/", function(req, res) {
 
 router.post("/save-article", function(req, res) {
     let data = req.body;
-    let article = new Article(data.headline, data.description, data.original_article);
-    news_scraper_service.saveArticle(article, function(cb_res) {
+    news_scraper_service.saveArticle(data.id, function(cb_res) {
         if(cb_res) {
             res.statusCode = 200;
             res.send({});
@@ -31,8 +30,7 @@ router.post("/save-article", function(req, res) {
 
 router.delete("/delete-article", function(req, res) {
     let data = req.body;
-    let article = new Article(data.headline, data.description, data.original_article);
-    news_scraper_service.removeSavedArticle(article, function(cb_res) {
+    news_scraper_service.removeSavedArticle(data.id, function(cb_res) {
         if(cb_res) {
             res.statusCode = 200;
             res.send({});

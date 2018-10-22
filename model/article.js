@@ -2,7 +2,7 @@ var hashCodeGenerator = require("./hashCodeGenerator.js");
 
 class Article {
 
-    constructor(headline, description, original_article, notes) {
+    constructor(id, headline, description, original_article) {
         if(headline) {
             this._headline = headline;
         } else {
@@ -18,11 +18,10 @@ class Article {
         } else {
             this._original_article = "";
         }
-        this._id = hashCodeGenerator(JSON.stringify({headline: this._headline, description: this._description, original_article: this._original_article}));
-        if(notes) {
-            this._notes = notes;
+        if(id) {
+            this._id = id;
         } else {
-            this._notes = [];
+            this._id = hashCodeGenerator(JSON.stringify({headline: this._headline, description: this._description, original_article: this._original_article}));
         }
     }
 
@@ -40,10 +39,6 @@ class Article {
 
     get original_article() {
         return this._original_article;
-    }
-
-    get notes() {
-        return this._notes;
     }
 
 }

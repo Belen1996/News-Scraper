@@ -1,19 +1,20 @@
 <div class="container">
     <h1>Latest news!</h1>
 
+
+<div class="container-fluid article-container">
     {{#each articles}}
-        <div class="row">
-            <div class="col-md-8">
-                {{headline}}<br>
-                ({{original_article}})
+    <div id="article-{{id}}">
+        <div data-id="{{id}}" class="card">
+            <div class="card-header">
+                <h3>
+                    <a class="article-link" target="_blank" rel="noopener noreferrer" href="{{original_article}}">{{headline}}</a>
+                    <a class="btn btn-success save"  onclick="saveArticle({{id}});">Save Article</a>
+                </h3>
             </div>
-            <div class="col-md-4">
-                <button id="save-article-{{id}}" onclick="saveArticle('{{headline}}', '{{description}}', '{{original_article}}');">Save article</button>
-            </div>
+            <div class="card-body">{{description}}</div>
         </div>
-        <div class="row">
-            {{description}}
-        </div>
-        <br>
+    </div>
     {{/each}}
+</div>
 </div>

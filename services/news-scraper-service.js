@@ -1,23 +1,29 @@
 var news_source = require("./news-source-service.js");
 var db = require("./news-scraper-db.js");
 
-function scrapeArticlesFromSource(source){
+function scrapeArticlesFromSource(source, db){
     return function (cb) {
-        cb(source.getArticles());
+        source.getArticles(function(articles) {
+            db.storeDisplayedArticles(articles, function(cbRes) {
+                db.getDisplayedArticles(function(displayed_articles) {
+                    cb(displayed_articles);
+                });
+            });    
+        });
     }
 }
 
 function saveArticle(db) {
-    return function(article, cb) {
-        db.saveArticle(article, function(res) {
+    return function(id, cb) {
+        db.saveArticle(id, function(res) {
             cb(res);
         });
     }
 }
 
 function removeSavedArticle(db) {
-    return function(article, cb) {
-        db.removeSavedArticle(article, function(res) {
+    return function(id, cb) {
+        db.removeSavedArticle(id, function(res) {
             cb(res);
         });
     }
@@ -36,7 +42,7 @@ function clearSavedArticles(db) {
 }
 
 var news_scraper_service = {
-    scrapeArticlesFromSource: scrapeArticlesFromSource(news_source),
+    scrapeArticlesFromSource: scrapeArticlesFromSource(news_source, db),
     saveArticle: saveArticle(db),
     removeSavedArticle: removeSavedArticle(db),
     getSavedArticles: getSavedArticles(db),
