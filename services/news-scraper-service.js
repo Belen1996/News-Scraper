@@ -1,10 +1,46 @@
-var news_scraper_service = {
+var news_source = require("./news-source-service.js");
+var db = require("./news-scraper-db.js");
 
-    scrapeArticlesFromSource: function(cb) { // TODO: Query news service for the articles
-        cb([{id: 1, headline: "Headline 1", description: "Article 1", original_article: "http://www.google.com", notes: []},
-            {id: 2, headline: "Headline 2", description: "Article 2", original_article: "http://www.yahoo.com", notes: []}]);
+function scrapeArticlesFromSource(source){
+    return function (cb) {
+        cb(source.getArticles());
     }
+}
 
+function saveArticle(db) {
+    return function(article, cb) {
+        db.saveArticle(article, function(res) {
+            cb(res);
+        });
+    }
+}
+
+function removeSavedArticle(db) {
+    return function(article, cb) {
+        db.removeSavedArticle(article, function(res) {
+            cb(res);
+        });
+    }
+}
+
+function getSavedArticles(db) {
+    return function(cb) {
+        db.getSavedArticles(cb);
+    }
+}
+
+function clearSavedArticles(db) {
+    return function() {
+        db.clearSavedArticles();
+    }
+}
+
+var news_scraper_service = {
+    scrapeArticlesFromSource: scrapeArticlesFromSource(news_source),
+    saveArticle: saveArticle(db),
+    removeSavedArticle: removeSavedArticle(db),
+    getSavedArticles: getSavedArticles(db),
+    clearSavedArticles: clearSavedArticles(db)
 }
 
 module.exports = news_scraper_service;
