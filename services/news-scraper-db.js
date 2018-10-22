@@ -1,22 +1,6 @@
 var displayed_articles = [];
 var saved_articles = [];
 
-
-
-// var mongoose = require('mongoose');
-
-// var mongoDB =
-//     process.env.MONGOLAB_URI ||
-//     process.env.MONGOHQ_URL ||
-//     'mongodb://localhost/HelloMongoose';
-    
-// mongoose.connect(mongoDB);
-
-// mongoose.Promise = global.Promise;
-// var db = mongoose.connection;
-
-// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
 function articleAlreadyExists(articles, id) {
     if(!articles || !id) {
         return false;
@@ -56,6 +40,10 @@ function getDisplayedArticles(cb) {
 
 function clearSavedArticles() {
     saved_articles = [];
+}
+
+function clearDisplayedArticles() {
+    displayed_articles = [];
 }
 
 function removeSavedArticle(id, cb) {
@@ -118,6 +106,7 @@ function removeNote(article_id, note_id, cb) {
 
 var news_scraper_db = {
     storeDisplayedArticles: storeDisplayedArticles,
+    clearDisplayedArticles: clearDisplayedArticles,
     getDisplayedArticles: getDisplayedArticles,
     saveArticle: saveArticle,
     getSavedArticles: getSavedArticles,

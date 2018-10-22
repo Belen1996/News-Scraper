@@ -1,5 +1,8 @@
 var news_source = require("./news-source-service.js");
-var db = require("./news-scraper-db.js");
+
+const isRunningInHeroku = (process.env.NODE && (process.env.NODE.indexOf("heroku") !== -1));
+
+var db = (isRunningInHeroku) ? require("./news-scraper-mongo-db.js") : require("./news-scraper-db.js");
 
 function scrapeArticlesFromSource(source, db){
     return function (cb) {
