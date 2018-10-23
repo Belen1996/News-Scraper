@@ -68,18 +68,23 @@ var SavedArticleModel = mongoose.model('SavedArticle',
 
 function saveArticle(id, cb) {
     if(id) {
+        console.log("article id to save: " + id);
         SavedArticleModel.countDocuments({article: {articleId: id}}, function(saError, count) {
             if(count === 0) {
-                ArticleModel.findOne({_articleId: id}, function(amError, articleDoc) {
-                    console.log("article: " + articleDoc);
+                console.log("article id not found in saved articles");
+                ArticleModel.findOne({articleId: id}, function(amError, articleDoc) {
+                    console.log("article: " + JSON.stringify(articleDoc.toObject()));
                     if(articleDoc) {
                         let article = articleDoc.toObject({getters: true});
                         let savedArticleToStore = new SavedArticleModel({article: article, notes: []});
                         savedArticleToStore.save(function(insertError) {
                             if(insertError) {
+                                console.error("Error while trying to save article: " + JSON.stringify(article) + " => " + error);
                                 cb(false);
                             } else {
-                                ArticleModel.remove({_articleId: id}, function(error) {});
+                                ArticleModel.remove({articleId: id}, function(error) {
+                                    console.error("Error while trying to remove article id: " + id + " => " + error);
+                                });
                                 cb(true);
                             }
                         });    
@@ -115,12 +120,6 @@ function getDisplayedArticles(cb) {
         var articles = [];
         result = result.map(o => o.toObject());
         result.forEach(a => {
-            console.log("article: " + JSON.stringify(a));
-            console.log("article id: " + a.articleId);
-            console.log("article headline: " + a.headline);
-            console.log("article description: " + a.description);
-            console.log("article original article: " + a.original_article);
-
             articles.push(new Article(a.articleId, a.headline, a.description, a.original_article));
         })
         cb(articles);
@@ -137,13 +136,13 @@ function clearDisplayedArticles() {
 
 function removeSavedArticle(id, cb) {
     if(id) {
-        SavedArticleModel.findOne({article: {_articleId: id}}, function(saError, savedArticleDoc) {
+        SavedArticleModel.findOne({article: {articleId: id}}, function(saError, savedArticleDoc) {
             if(!saError) {
                 let savedArticle = savedArticleDoc.toObject({getters : true});
                 var articleToSave = new ArticleModel(savedArticle.article)
                 articleToSave.save(function(amError) {
                     if(!amError) {
-                        SavedArticleModel.remove({article: {_articleId: id}}, function(error) {});
+                        SavedArticleModel.remove({article: {articleId: id}}, function(error) {});
                         cb(true);
                     } else {
                         cb(false);
