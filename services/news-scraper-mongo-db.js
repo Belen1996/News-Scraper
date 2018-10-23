@@ -104,13 +104,13 @@ function saveArticle(id, cb) {
 
 function getSavedArticles(cb) {
     SavedArticleModel.find({}, function(error, result) {
-        cb(result.toObject({ getters: true }).map(sa => sa.article));
+        cb(result.map(sa => sa.article));
     });   
 }
 
 function getDisplayedArticles(cb) {
     ArticleModel.find({}, function(error, result) {
-        cb(result.toObject({getters: true}));
+        cb(result);
     });
 }
 
