@@ -116,12 +116,12 @@ function getDisplayedArticles(cb) {
         result = result.map(o => o.toObject());
         result.forEach(a => {
             console.log("article: " + JSON.stringify(a));
-            console.log("article id: " + a._articleId);
-            console.log("article headline: " + a._headline);
-            console.log("article description: " + a._description);
-            console.log("article original article: " + a._original_article);
+            console.log("article id: " + a.articleId);
+            console.log("article headline: " + a.headline);
+            console.log("article description: " + a.description);
+            console.log("article original article: " + a.original_article);
 
-            articles.push(new Article(a._articleId, a._headline, a._description, a._original_article));
+            articles.push(new Article(a.articleId, a.headline, a.description, a.original_article));
         })
         cb(articles);
     });
