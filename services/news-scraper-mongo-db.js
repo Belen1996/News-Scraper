@@ -83,7 +83,8 @@ function saveArticle(id, cb) {
             if(count === 0) {
                 ArticleModel.findOne({id: id}, function(amError, articleDoc) {
                     let article = articleDoc.toObject({getters: true});
-                    SavedArticleModel.insert({article: article, notes: []}, function(insertError, result) {
+                    let savedArticleToStore = new SavedArticleModel({article: article, notes: []});
+                    savedArticleToStore.save(function(insertError) {
                         if(insertError) {
                             cb(false);
                         } else {
@@ -126,7 +127,8 @@ function removeSavedArticle(id, cb) {
         SavedArticleModel.findOne({article: {id: id}}, function(saError, savedArticleDoc) {
             if(!saError) {
                 let savedArticle = savedArticleDoc.toObject({getters : true});
-                ArticleModel.insert(savedArticle.article, function(amError, result) {
+                var articleToSave = new ArticleModel(savedArticle.article)
+                articleToSave.save(function(amError) {
                     if(!amError) {
                         SavedArticleModel.remove({article: {id: id}}, function(error) {});
                         cb(true);
@@ -150,7 +152,8 @@ function storeDisplayedArticles(articles, cb) {
                 if(saCount === 0) {
                     ArticleModel.countDocuments({id: article.id}, function(amError, amCount) {
                         if(amCount === 0) {
-                            ArticleModel.insert(article, function(error, result) {
+                            let articleToStore = new ArticleModel(article)
+                            articleToStore.save(function(error) {
                             });
                         }
                     });
@@ -193,7 +196,7 @@ function getNotes(article_id, cb) {
     if(article_id) {
         SavedArticleModel.findOne({article: {id: article_id}}, function(saError, savedArticleDoc) {
             if(!saError) {
-                let saveArticle = savedArticleDoc.toObject({getters: true});
+                let savedArticle = savedArticleDoc.toObject({getters: true});
                 cb(savedArticle.notes.slice());
             } else {
                 cb([]);
