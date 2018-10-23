@@ -166,14 +166,19 @@ function removeSavedArticle(id, cb) {
 }
 
 function storeDisplayedArticles(articles, cb) {
+    console.log("articles: " + articles);
     if(articles && articles.length > 0) {
         articles.forEach(article => {
-            SavedArticleModel.countDocuments({article: {_articleId: article.articleId}}, function(saError, saCount) {
+            console.log("article: " + article);
+            SavedArticleModel.countDocuments({article: {articleId: article.articleId}}, function(saError, saCount) {
+                console.log("found in saved? " + (saCount === 0));
                 if(saCount === 0) {
-                    ArticleModel.countDocuments({_articleId: article.articleId}, function(amError, amCount) {
+                    ArticleModel.countDocuments({articleId: article.articleId}, function(amError, amCount) {
+                        console.log("found in displayed? " + (amCount === 0));
                         if(amCount === 0) {
                             let articleToStore = new ArticleModel(article)
                             articleToStore.save(function(error) {
+                                console.error("Failed storing article " + article + " => " + error);
                             });
                         }
                     });
@@ -188,12 +193,12 @@ function storeDisplayedArticles(articles, cb) {
 
 function saveNote(article_id, note, cb) {
     if(article_id && note) {
-        SavedArticleModel.findOne({article: {_articleId: article_id}}, function(saError, savedArticleDoc) {
+        SavedArticleModel.findOne({article: {articleId: article_id}}, function(saError, savedArticleDoc) {
             if(!saError) {
                 let savedArticle = savedArticleDoc.toObject({getters: true});
                 if(savedArticle.notes.filter(n => n.noteId === note.noteId).length === 0) {
                     savedArticle.notes.push(note);
-                    SavedArticleModel.findOneAndUpdate({article: {_articleId: article_id}}, savedArticle, function(updateError, result) {
+                    SavedArticleModel.findOneAndUpdate({article: {articleId: article_id}}, savedArticle, function(updateError, result) {
                         if(!updateError) {
                             cb(true);
                         } else {
@@ -214,7 +219,7 @@ function saveNote(article_id, note, cb) {
 
 function getNotes(article_id, cb) {
     if(article_id) {
-        SavedArticleModel.findOne({article: {_articleId: article_id}}, function(saError, savedArticleDoc) {
+        SavedArticleModel.findOne({article: {articleId: article_id}}, function(saError, savedArticleDoc) {
             if(!saError) {
                 let savedArticle = savedArticleDoc.toObject({getters: true});
                 cb(savedArticle.notes.slice());
@@ -229,11 +234,11 @@ function getNotes(article_id, cb) {
 
 function removeNote(article_id, note_id, cb) {
     if(article_id && note) {
-        SavedArticleModel.findOne({_article: {_articleId: article_id}}, function(saError, savedArticleDoc) {
+        SavedArticleModel.findOne({article: {articleId: article_id}}, function(saError, savedArticleDoc) {
             if(!saError) {
                 let savedArticle = savedArticleDoc.toObject({getters: true});
                 savedArticle.notes = savedArticle.notes.filter(n => n.noteId !== note_id);
-                SavedArticleModel.findOneAndUpdate({_article: {_articleId: article_id}}, savedArticle, function(updateError, result) {
+                SavedArticleModel.findOneAndUpdate({article: {articleId: article_id}}, savedArticle, function(updateError, result) {
                     if(!updateError) {
                         cb(true);
                     } else {
