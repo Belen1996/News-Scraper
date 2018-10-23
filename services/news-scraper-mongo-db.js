@@ -122,6 +122,12 @@ function getDisplayedArticles(cb) {
         console.log("result: " + result);
         var articles = [];
         result.forEach(a => {
+            console.log("article: " + a);
+            console.log("article id: " + a._id);
+            console.log("article headline: " + a._headline);
+            console.log("article description: " + a._description);
+            console.log("article url: " + a._original_article);
+
             articles.push(new Article(a._id, a._headline, a._description, a._original_article));
         })
         articles.forEach(a => {
