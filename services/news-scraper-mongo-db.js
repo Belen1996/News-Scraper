@@ -168,9 +168,9 @@ function removeSavedArticle(id, cb) {
 function storeDisplayedArticles(articles, cb) {
     if(articles && articles.length > 0) {
         articles.forEach(article => {
-            SavedArticleModel.countDocuments({article: {_articleId: article.id}}, function(saError, saCount) {
+            SavedArticleModel.countDocuments({article: {_articleId: article.articleId}}, function(saError, saCount) {
                 if(saCount === 0) {
-                    ArticleModel.countDocuments({_articleId: article.id}, function(amError, amCount) {
+                    ArticleModel.countDocuments({_articleId: article.articleId}, function(amError, amCount) {
                         if(amCount === 0) {
                             let articleToStore = new ArticleModel(article)
                             articleToStore.save(function(error) {
