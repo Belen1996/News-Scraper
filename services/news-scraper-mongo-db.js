@@ -37,13 +37,13 @@ function saveArticle(id, cb) {
 
 function getSavedArticles(cb) {
     saved_articles.find({}, function(error, result) {
-        cb(result.map(sa => sa.article).slice());
+        cb(result.map(sa => sa.article));
     });   
 }
 
 function getDisplayedArticles(cb) {
     displayed_articles.find({}, function(error, result) {
-        cb(result.slice());
+        cb(result);
     });
 }
 
