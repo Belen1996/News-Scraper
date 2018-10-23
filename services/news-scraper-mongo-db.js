@@ -44,7 +44,7 @@ function getSavedArticles(cb) {
 function getDisplayedArticles(cb) {
     displayed_articles.find({}).lean().exec(function(error, result) {
         console.log(result);
-        cb(result);
+        cb(JSON.stringify(result));
     });
 }
 
