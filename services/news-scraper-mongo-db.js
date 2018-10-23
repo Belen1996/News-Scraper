@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var mongoDB = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL;
+var mongoDB = process.env.MONGODB_URI || process.env.MONGOHQ_URL;
     
 mongoose.connect(mongoDB);
 
