@@ -111,6 +111,7 @@ function getSavedArticles(cb) {
         console.log("result: " + JSON.stringify(result));
         result.forEach(sa => {
             let notes = (sa.notes) ? sa.notes.map(n => ({noteId: n.noteId, author: n.author, text: n.text})) : [];
+            let a = sa.article;
             articles.push({article: {articleId: a.articleId, headline: a.headline, description: a.description, original_article: a.original_article}, notes: notes });        
         });
         console.log("saved articles: " + articles);
