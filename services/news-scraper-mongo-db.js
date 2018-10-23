@@ -43,7 +43,7 @@ function getSavedArticles(cb) {
 
 function getDisplayedArticles(cb) {
     displayed_articles.find({}, function(error, result) {
-        cb(JSON.parse(JSON.encode(doc)));
+        cb(JSON.parse(JSON.encode(result)));
     });
 }
 
