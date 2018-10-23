@@ -121,6 +121,7 @@ function getDisplayedArticles(cb) {
     ArticleModel.find({}, function(error, result) {
         console.log("result: " + result);
         var articles = [];
+        result = result.map(o => o.toObject());
         result.forEach(a => {
             console.log("article: " + a);
             console.log("article id: " + a._id);
