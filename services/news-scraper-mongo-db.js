@@ -139,7 +139,7 @@ function removeNote(article_id, note_id, cb) {
     if(article_id && note) {
         saved_articles.findOne({article: {id: article_id}}, function(saError, savedArticle) {
             if(!saError) {
-                savedArticle.notes = savedArticle.notes.filter(n => n.id !== note.id);
+                savedArticle.notes = savedArticle.notes.filter(n => n.id !== note_id);
                 saved_articles.findOneAndUpdate({article: {id: article_id}}, savedArticle, function(updateError, result) {
                     if(!updateError) {
                         cb(true);

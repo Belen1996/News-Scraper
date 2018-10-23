@@ -41,8 +41,7 @@ router.delete("/delete-article", function(req, res) {
     })
 });
 
-
-router.get("/saved-articles", function(req, res) {
+router.get("/saved", function(req, res) {
     news_scraper_service.getSavedArticles(function(savedArticles) {
         var hbsObject = {
             savedArticles: savedArticles
