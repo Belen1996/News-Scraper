@@ -1,3 +1,5 @@
+const Article = require("../model/article.js");
+
 var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -10,7 +12,7 @@ var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-var displayed_articles = db.collection('displayed_articles');
+//var displayed_articles = db.collection('displayed_articles');
 //var saved_articles = db.collection('saved_articles');
 
 var ArticleModel = mongoose.model('Article',
@@ -104,14 +106,26 @@ function saveArticle(id, cb) {
 
 function getSavedArticles(cb) {
     SavedArticleModel.find({}, function(error, result) {
-        cb(result.map(sa => sa.article));
+        console.log("result: " + result);
+        var articles = [];
+        result.forEach(sa => {
+            let notes = sa._notes.map(n => ({id: n._id, author: n._author, text: n._text}));
+            articles.push({article: {id: a._id, headline: a._headline, description: a._description, original_article: a._original_article}, notes: notes });        
+        });
+        console.log("saved articles: " + articles);
+        cb(articles.map(sa => sa.article));
     });   
 }
 
 function getDisplayedArticles(cb) {
     ArticleModel.find({}, function(error, result) {
         console.log("result: " + result);
-        cb(result);
+        var articles = [];
+        result.forEach(a => {
+            articles.push(new Article(a._id, a._headline, a._description, a._original_article));
+        })
+        console.log("articles: " + articles);
+        cb(articles);
     });
 }
 
