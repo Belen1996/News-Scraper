@@ -4,12 +4,12 @@
 
     <div id="articles" class="container-fluid article-container">
         {{#each articles}}
-        <div id="article-{{id}}">
-            <div data-id="{{id}}" class="card">
+        <div id="article-{{articleId}}">
+            <div data-id="{{articleId}}" class="card">
                 <div class="card-header">
                     <h3>
                         <a class="article-link" target="_blank" rel="noopener noreferrer" href="{{original_article}}">{{headline}}</a>
-                        <a class="btn btn-success save" onclick="saveArticle({{id}});">Save Article</a>
+                        <a class="btn btn-success save" onclick="saveArticle({{articleId}});">Save Article</a>
                     </h3>
                 </div>
                 <div class="card-body">{{description}}</div>

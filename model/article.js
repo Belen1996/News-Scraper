@@ -19,14 +19,14 @@ class Article {
             this._original_article = "";
         }
         if(id) {
-            this._id = id;
+            this._articleId = id;
         } else {
-            this._id = hashCodeGenerator(JSON.stringify({headline: this._headline, description: this._description, original_article: this._original_article}));
+            this._articleId = hashCodeGenerator(JSON.stringify({headline: this._headline, description: this._description, original_article: this._original_article}));
         }
     }
 
-    get id() {
-        return this._id;
+    get articleId() {
+        return this._articleId;
     }
 
     get headline() {

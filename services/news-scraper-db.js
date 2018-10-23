@@ -5,7 +5,7 @@ function articleAlreadyExists(articles, id) {
     if(!articles || !id) {
         return false;
     } else {
-        return (articles.filter(a => a.id === id).length > 0);
+        return (articles.filter(a => a.articleId === id).length > 0);
     }
 }
 
@@ -13,10 +13,10 @@ function saveArticle(id, cb) {
     if(id) {
         let res = !(articleAlreadyExists(saved_articles.map(sa => sa.article), id));
         if(res) {
-            let found_articles = displayed_articles.filter(a => a.id === id);
+            let found_articles = displayed_articles.filter(a => a.articleId === id);
             if(found_articles.length > 0) {
                 let article = found_articles[0];
-                displayed_articles = displayed_articles.filter(a => a.id !== id);
+                displayed_articles = displayed_articles.filter(a => a.articleId !== id);
                 saved_articles.push({article: article, notes: [] });
             } else {
                 cb(false);
@@ -49,8 +49,8 @@ function clearDisplayedArticles() {
 function removeSavedArticle(id, cb) {
     let res = articleAlreadyExists(saved_articles.map(sa => sa.article), id);
     if(res) {
-        let article = saved_articles.map(sa => sa.article).filter(a => a.id === id)[0];
-        saved_articles = saved_articles.filter(sa => sa.article.id !== id);
+        let article = saved_articles.map(sa => sa.article).filter(a => a.articleId === id)[0];
+        saved_articles = saved_articles.filter(sa => sa.article.articleId !== id);
         displayed_articles.push(article); 
     }
     cb(res);
@@ -60,7 +60,7 @@ function storeDisplayedArticles(articles, cb) {
     if(articles && articles.length > 0) {
         let currently_saved_articles = saved_articles.map(sa => sa.article);
         articles.forEach(article => {
-            if(!articleAlreadyExists(displayed_articles.concat(currently_saved_articles), article.id)) {
+            if(!articleAlreadyExists(displayed_articles.concat(currently_saved_articles), article.articleId)) {
                 displayed_articles.push(article);
             }
         });
@@ -77,7 +77,7 @@ function noteAlreadyExists(notes, note_id) {
 function saveNote(article_id, note, cb) {
     if(articleAlreadyExists(saved_articles.map(sa => sa.article), article_id) && 
        note && !noteAlreadyExists(saved_articles.map(sa => sa.notes), note.id)) {
-        let entry = saved_articles.filter(sa => sa.article.id === article_id)[0];
+        let entry = saved_articles.filter(sa => sa.article.articleId === article_id)[0];
         entry.notes.push(note);
         cb(true);
     } else {
@@ -87,7 +87,7 @@ function saveNote(article_id, note, cb) {
 
 function getNotes(article_id, cb) {
     if(articleAlreadyExists(saved_articles.map(sa => sa.article), article_id)) {
-        cb(saved_articles.filter(sa => sa.article.id === article_id)[0].notes.slice());
+        cb(saved_articles.filter(sa => sa.article.articleId === article_id)[0].notes.slice());
     } else {
         cb([]);
     }
@@ -96,7 +96,7 @@ function getNotes(article_id, cb) {
 function removeNote(article_id, note_id, cb) {
     if(articleAlreadyExists(saved_articles.map(sa => sa.article), article_id) && 
        note_id && noteAlreadyExists(saved_articles.map(sa => sa.notes), note_id)) {
-        let entry = saved_articles.filter(sa => sa.article.id === article_id)[0];
+        let entry = saved_articles.filter(sa => sa.article.articleId === article_id)[0];
         entry.notes = entry.notes.filter(n => n.id !== note_id);
         cb(true);
     } else {

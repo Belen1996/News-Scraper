@@ -3,12 +3,12 @@
 
     <div class="container-fluid article-container">
         {{#each savedArticles}}
-        <div id="article-{{id}}">
-            <div data-id="{{id}}" class="card">
+        <div id="article-{{articleId}}">
+            <div data-id="{{articleId}}" class="card">
                 <div class="card-header">
                     <h3>
                         <a class="article-link" target="_blank" rel="noopener noreferrer" href="{{original_article}}">{{headline}}</a>
-                        <a class="btn btn-danger delete" onclick="removeArticle({{id}});">Remove Article</a>
+                        <a class="btn btn-danger delete" onclick="removeArticle({{articleId}});">Remove Article</a>
                         <a class="btn btn-info notes" onclick="">Comment Article</a>
                     </h3>
                 </div>
