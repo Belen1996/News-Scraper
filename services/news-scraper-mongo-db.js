@@ -124,7 +124,9 @@ function getDisplayedArticles(cb) {
         result.forEach(a => {
             articles.push(new Article(a._id, a._headline, a._description, a._original_article));
         })
-        console.log("articles: " + articles);
+        articles.forEach(a => {
+            console.log("articles: " + a.id + ", " + a.headline + ", " + a.description + ", " + a.original_article);
+        })
         cb(articles);
     });
 }
