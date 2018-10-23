@@ -71,12 +71,12 @@ function storeDisplayedArticles(articles, cb) {
 }
 
 function noteAlreadyExists(notes, note_id) {
-    return notes && note_id && (notes.filter(n => n.id === note_id).length > 0);
+    return notes && note_id && (notes.filter(n => n.noteId === note_id).length > 0);
 }
 
 function saveNote(article_id, note, cb) {
     if(articleAlreadyExists(saved_articles.map(sa => sa.article), article_id) && 
-       note && !noteAlreadyExists(saved_articles.map(sa => sa.notes), note.id)) {
+       note && !noteAlreadyExists(saved_articles.map(sa => sa.notes), note.noteId)) {
         let entry = saved_articles.filter(sa => sa.article.articleId === article_id)[0];
         entry.notes.push(note);
         cb(true);
@@ -97,7 +97,7 @@ function removeNote(article_id, note_id, cb) {
     if(articleAlreadyExists(saved_articles.map(sa => sa.article), article_id) && 
        note_id && noteAlreadyExists(saved_articles.map(sa => sa.notes), note_id)) {
         let entry = saved_articles.filter(sa => sa.article.articleId === article_id)[0];
-        entry.notes = entry.notes.filter(n => n.id !== note_id);
+        entry.notes = entry.notes.filter(n => n.noteId !== note_id);
         cb(true);
     } else {
         cb(false);

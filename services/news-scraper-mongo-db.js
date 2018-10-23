@@ -61,7 +61,7 @@ var SavedArticleModel = mongoose.model('SavedArticle',
         },
         notes: [
             {
-                id: {
+                noteId: {
                     type: Number,
                     required: true
                 },
@@ -191,7 +191,7 @@ function saveNote(article_id, note, cb) {
         SavedArticleModel.findOne({article: {_articleId: article_id}}, function(saError, savedArticleDoc) {
             if(!saError) {
                 let savedArticle = savedArticleDoc.toObject({getters: true});
-                if(savedArticle.notes.filter(n => n.id === note.id).length === 0) {
+                if(savedArticle.notes.filter(n => n.noteId === note.noteId).length === 0) {
                     savedArticle.notes.push(note);
                     SavedArticleModel.findOneAndUpdate({article: {_articleId: article_id}}, savedArticle, function(updateError, result) {
                         if(!updateError) {
@@ -232,7 +232,7 @@ function removeNote(article_id, note_id, cb) {
         SavedArticleModel.findOne({_article: {_articleId: article_id}}, function(saError, savedArticleDoc) {
             if(!saError) {
                 let savedArticle = savedArticleDoc.toObject({getters: true});
-                savedArticle.notes = savedArticle.notes.filter(n => n.id !== note_id);
+                savedArticle.notes = savedArticle.notes.filter(n => n.noteId !== note_id);
                 SavedArticleModel.findOneAndUpdate({_article: {_articleId: article_id}}, savedArticle, function(updateError, result) {
                     if(!updateError) {
                         cb(true);

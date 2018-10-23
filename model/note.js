@@ -14,14 +14,14 @@ class Note {
             this._author = "";
         }
         if(id) {
-            this._id = id;
+            this._noteId = id;
         } else {
-            this._id = hashCodeGenerator(JSON.stringify({text: this._text, author: this._author}));
+            this._noteId = hashCodeGenerator(JSON.stringify({text: this._text, author: this._author}));
         }
     }
 
-    get id() {
-        return this._id;
+    get noteId() {
+        return this._noteId;
     }
 
     get text() {
