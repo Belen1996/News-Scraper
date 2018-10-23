@@ -110,6 +110,7 @@ function getSavedArticles(cb) {
 
 function getDisplayedArticles(cb) {
     ArticleModel.find({}, function(error, result) {
+        console.log("result: " + result);
         cb(result);
     });
 }
