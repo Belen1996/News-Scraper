@@ -115,7 +115,7 @@ function getDisplayedArticles(cb) {
         var articles = [];
         result = result.map(o => o.toObject());
         result.forEach(a => {
-            console.log("article: " + a);
+            console.log("article: " + JSON.stringify(a));
             console.log("article id: " + a._articleId);
             console.log("article headline: " + a._headline);
             console.log("article description: " + a._description);
