@@ -83,7 +83,9 @@ function saveArticle(id, cb) {
                                 cb(false);
                             } else {
                                 ArticleModel.remove({articleId: id}, function(error) {
-                                    console.error("Error while trying to remove article id: " + id + " => " + error);
+                                    if(error) {
+                                        console.error("Error while trying to remove article id: " + id + " => " + error);
+                                    }
                                 });
                                 cb(true);
                             }
@@ -106,9 +108,10 @@ function getSavedArticles(cb) {
         console.log("result: " + result);
         var articles = [];
         result = result.map(o => o.toObject());
+        console.log("result: " + JSON.stringify(result));
         result.forEach(sa => {
-            let notes = sa._notes.map(n => ({id: n._id, author: n._author, text: n._text}));
-            articles.push({article: {articleId: a._articleId, headline: a._headline, description: a._description, original_article: a._original_article}, notes: notes });        
+            let notes = (sa.notes) ? sa.notes.map(n => ({noteId: n.noteId, author: n.author, text: n.text})) : [];
+            articles.push({article: {articleId: a.articleId, headline: a.headline, description: a.description, original_article: a.original_article}, notes: notes });        
         });
         console.log("saved articles: " + articles);
         cb(articles.map(sa => sa.article));
@@ -175,7 +178,9 @@ function storeDisplayedArticles(articles, cb) {
                                 original_article: article.original_article
                             })
                             articleToStore.save(function(error) {
-                                console.error("Failed storing article " + JSON.stringify(article) + " => " + error);
+                                if(error) {
+                                    console.error("Failed storing article " + JSON.stringify(article) + " => " + error);
+                                }
                             });
                         }
                     });
