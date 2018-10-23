@@ -42,9 +42,9 @@ function getSavedArticles(cb) {
 }
 
 function getDisplayedArticles(cb) {
-    displayed_articles.find({}, function(error, result) {
+    displayed_articles.find({}).lean().exec(function(error, result) {
         console.log(result);
-        cb(JSON.parse(result));
+        cb(result);
     });
 }
 
