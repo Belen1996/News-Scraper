@@ -84,16 +84,21 @@ function saveArticle(id, cb) {
         SavedArticleModel.countDocuments({article: {id: id}}, function(saError, count) {
             if(count === 0) {
                 ArticleModel.findOne({id: id}, function(amError, articleDoc) {
-                    let article = articleDoc.toObject({getters: true});
-                    let savedArticleToStore = new SavedArticleModel({article: article, notes: []});
-                    savedArticleToStore.save(function(insertError) {
-                        if(insertError) {
-                            cb(false);
-                        } else {
-                            ArticleModel.remove({id: id}, function(error) {});
-                            cb(true);
-                        }
-                    });
+                    console.log("article: " + articleDoc);
+                    if(articleDoc) {
+                        let article = articleDoc.toObject({getters: true});
+                        let savedArticleToStore = new SavedArticleModel({article: article, notes: []});
+                        savedArticleToStore.save(function(insertError) {
+                            if(insertError) {
+                                cb(false);
+                            } else {
+                                ArticleModel.remove({id: id}, function(error) {});
+                                cb(true);
+                            }
+                        });    
+                    } else {
+                        cb(false);
+                    }
                 });
             } else {
                 cb(false);
@@ -108,6 +113,7 @@ function getSavedArticles(cb) {
     SavedArticleModel.find({}, function(error, result) {
         console.log("result: " + result);
         var articles = [];
+        result = result.map(o => o.toObject());
         result.forEach(sa => {
             let notes = sa._notes.map(n => ({id: n._id, author: n._author, text: n._text}));
             articles.push({article: {id: a._id, headline: a._headline, description: a._description, original_article: a._original_article}, notes: notes });        
@@ -119,20 +125,10 @@ function getSavedArticles(cb) {
 
 function getDisplayedArticles(cb) {
     ArticleModel.find({}, function(error, result) {
-        console.log("result: " + result);
         var articles = [];
         result = result.map(o => o.toObject());
         result.forEach(a => {
-            console.log("article: " + a);
-            console.log("article id: " + a._id);
-            console.log("article headline: " + a._headline);
-            console.log("article description: " + a._description);
-            console.log("article url: " + a._original_article);
-
             articles.push(new Article(a._id, a._headline, a._description, a._original_article));
-        })
-        articles.forEach(a => {
-            console.log("articles: " + a.id + ", " + a.headline + ", " + a.description + ", " + a.original_article);
         })
         cb(articles);
     });
