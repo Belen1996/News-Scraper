@@ -18,21 +18,16 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 var ArticleModel = mongoose.model('Article',
     new Schema({
         articleId: {
-            type: Number,
-            index: true,
-            unique: true,
-            required: true
+            type: Number
         },
         headline: {
-            type: String,
-            required: true
+            type: String
         },
         description: {
             type: String
         },
         original_article: {
-            type: String,
-            required: true
+            type: String
         }
     }),
     'displayed_articles'
@@ -42,36 +37,28 @@ var SavedArticleModel = mongoose.model('SavedArticle',
     new Schema({
         article: {
             articleId: {
-                type: Number,
-                index: true,
-                unique: true,
-                required: true
+                type: Number
             },
             headline: {
-                type: String,
-                required: true
+                type: String
             },
             description: {
                 type: String
             },
             original_article: {
-                type: String,
-                required: true
+                type: String
             }    
         },
         notes: [
             {
                 noteId: {
-                    type: Number,
-                    required: true
+                    type: Number
                 },
                 author: {
-                    type: String,
-                    required: true
+                    type: String
                 },
                 text: {
-                    type: String,
-                    required: true
+                    type: String
                 }
             }
         ]
@@ -171,10 +158,10 @@ function storeDisplayedArticles(articles, cb) {
         articles.forEach(article => {
             console.log("article: " + article);
             SavedArticleModel.countDocuments({article: {articleId: article.articleId}}, function(saError, saCount) {
-                console.log("found in saved? " + (saCount === 0));
+                console.log("Not found in saved? " + (saCount === 0));
                 if(saCount === 0) {
                     ArticleModel.countDocuments({articleId: article.articleId}, function(amError, amCount) {
-                        console.log("found in displayed? " + (amCount === 0));
+                        console.log("Not found in displayed? " + (amCount === 0));
                         if(amCount === 0) {
                             let articleToStore = new ArticleModel(article)
                             articleToStore.save(function(error) {
