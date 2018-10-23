@@ -43,7 +43,7 @@ function getSavedArticles(cb) {
 
 function getDisplayedArticles(cb) {
     displayed_articles.find({}, function(error, result) {
-        cb(result);
+        cb(result.map(x => new Article(x._id, x._headline, x._description, x._original_article)));
     });
 }
 
