@@ -156,16 +156,21 @@ function storeDisplayedArticles(articles, cb) {
     console.log("articles: " + articles);
     if(articles && articles.length > 0) {
         articles.forEach(article => {
-            console.log("article: " + article);
+            console.log("article: " + JSON.stringify(article));
             SavedArticleModel.countDocuments({article: {articleId: article.articleId}}, function(saError, saCount) {
                 console.log("Not found in saved? " + (saCount === 0));
                 if(saCount === 0) {
                     ArticleModel.countDocuments({articleId: article.articleId}, function(amError, amCount) {
                         console.log("Not found in displayed? " + (amCount === 0));
                         if(amCount === 0) {
-                            let articleToStore = new ArticleModel(article)
+                            let articleToStore = new ArticleModel({
+                                articleId: article.articleId,
+                                headline: article.headline,
+                                description: article.description,
+                                original_article: article.original_article
+                            })
                             articleToStore.save(function(error) {
-                                console.error("Failed storing article " + article + " => " + error);
+                                console.error("Failed storing article " + JSON.stringify(article) + " => " + error);
                             });
                         }
                     });
